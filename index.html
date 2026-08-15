@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Quest - Git概念学習ゲーム</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-icon">🌿</span>
+        <h1>Git Quest</h1>
+        <span class="badge">Beta v1.0</span>
+      </div>
+      <div class="stage-selector-container">
+        <label for="stage-select">ステージ選択:</label>
+        <select id="stage-select">
+          <option value="1">Stage 1: 最初のコミット (First Commit)</option>
+          <option value="2">Stage 2: タイムトラベル (Checkout)</option>
+          <option value="3">Stage 3: 新たな世界 (Branching)</option>
+          <option value="4">Stage 4: 統合の時 (Merge)</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Main Game Workspace -->
+    <main class="game-workspace">
+      
+      <!-- Left Column: Working Directory / File System -->
+      <section class="workspace-card file-system-card" id="working-directory-section">
+        <div class="card-header">
+          <span class="card-icon">💻</span>
+          <h2>ローカル環境 (Working Directory)</h2>
+        </div>
+        <div class="card-body">
+          <div class="file-manager">
+            <div class="file-manager-actions">
+              <button id="btn-create-file" class="action-btn">＋ ファイル作成</button>
+            </div>
+            <div class="file-tree-container">
+              <ul class="file-list" id="file-tree">
+                <!-- JavaScript がファイルを動的に描画 -->
+              </ul>
+            </div>
+          </div>
+          
+          <div class="file-editor-container">
+            <div class="editor-header">
+              <span class="editor-title" id="active-file-title">エディタ (未選択)</span>
+              <span class="editor-dot red"></span>
+              <span class="editor-dot yellow"></span>
+              <span class="editor-dot green"></span>
+            </div>
+            <textarea id="file-editor-textarea" placeholder="ファイルを選択して編集してください..." disabled></textarea>
+            <div class="editor-footer">
+              <button id="btn-save-file" class="save-btn" disabled>保存して反映</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Git Visualizer -->
+      <section class="workspace-card visualizer-card" id="git-visualizer-section">
+        <div class="card-header">
+          <span class="card-icon">👁️</span>
+          <h2>Git 内部状態 (Git Visualizer)</h2>
+        </div>
+        <div class="card-body visualizer-body">
+          
+          <!-- Staging Area Visual -->
+          <div class="visual-section staging-section">
+            <div class="visual-label">ステージングエリア (Staging Area / Index)</div>
+            <div class="staging-box" id="staging-area-box">
+              <div class="empty-placeholder">ファイルがステージされていません (git add が必要)</div>
+            </div>
+          </div>
+          
+          <!-- Git History (Commit Tree Graph) -->
+          <div class="visual-section history-section">
+            <div class="visual-label">リポジトリ履歴 (Local Repository - Commit Graph)</div>
+            <div class="history-graph-wrapper" id="commit-graph-wrapper">
+              <canvas id="git-graph-canvas"></canvas>
+              <div class="history-tree" id="commit-nodes-container">
+                <!-- コミットノードをDOMで重ねて描画 -->
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Right Column: Mission Control & Terminal -->
+      <section class="workspace-card mission-card" id="mission-control-section">
+        <div class="card-header">
+          <span class="card-icon">🎯</span>
+          <h2>ミッションコントロール (Mission)</h2>
+        </div>
+        <div class="card-body mission-body">
+          
+          <!-- Mission Info -->
+          <div class="mission-info-box">
+            <h3 id="mission-title">ステージ 1: 最初のコミット</h3>
+            <p id="mission-description">読み込み中...</p>
+            <div class="mission-targets">
+              <h4>達成条件:</h4>
+              <ul id="mission-targets-list">
+                <!-- 動的にターゲットを表示 -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Helper Operations -->
+          <div class="helper-actions-box">
+            <h4>簡易コマンドボタン:</h4>
+            <div class="helper-buttons">
+              <button id="btn-cmd-status" class="cmd-btn">git status</button>
+              <button id="btn-cmd-add" class="cmd-btn">git add .</button>
+              <button id="btn-cmd-commit" class="cmd-btn">git commit</button>
+              <button id="btn-cmd-log" class="cmd-btn">git log</button>
+            </div>
+          </div>
+
+          <!-- Terminal / Console -->
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">git-bash - terminal</span>
+            </div>
+            <div class="terminal-output" id="terminal-logs">
+              <div>Welcome to Git Quest Terminal!</div>
+              <div>Gitコマンドを入力するか、上の簡易ボタンを使用してください。</div>
+              <div>ヒント: `git status` で現在の状態を確認できます。</div>
+            </div>
+            <div class="terminal-input-line">
+              <span class="terminal-prompt">you23@GitQuest:~/project$</span>
+              <input type="text" id="terminal-input" placeholder="git status ..." autocomplete="off" autofocus>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+      <div class="modal-content">
+        <div class="modal-icon">🎉</div>
+        <h2 id="modal-title">Stage Clear!</h2>
+        <div class="modal-body" id="modal-body-text">
+          おめでとうございます！ステージをクリアしました。
+        </div>
+        <div class="modal-explanation" id="modal-explanation-text">
+          Gitの概念解説がここに入ります。
+        </div>
+        <div class="modal-footer">
+          <button id="btn-next-stage" class="primary-btn">次のステージへ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Script -->
+  <script src="game.js"></script>
+</body>
+</html>
